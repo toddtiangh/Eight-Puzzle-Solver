@@ -2,11 +2,6 @@ import random
 from state import *
 
 class Searcher:
-    """ A class for objects that perform random state-space
-        search on an Eight Puzzle.
-        This will also be used as a superclass of classes for
-        other state-space search algorithms.
-    """
     def __init__(self, depth_limit):
         self.states = []
         self.num_tested = 0
@@ -29,9 +24,6 @@ class Searcher:
                 self.add_state(new_states[i])
 
     def next_state(self):
-        """ chooses the next state to be tested from the list of
-            untested states, removing it from the list and returning it
-        """
         s = random.choice(self.states)
         self.states.remove(s)
         return s
@@ -49,9 +41,6 @@ class Searcher:
         return current_state
 
     def __repr__(self):
-        """ returns a string representation of the Searcher object
-            referred to by self.
-        """
         s = type(self).__name__ + ': '
         s += str(len(self.states)) + ' untested, '
         s += str(self.num_tested) + ' tested, '
@@ -77,7 +66,6 @@ class DFSearcher(Searcher):
         return s
 
 def h0(state):
-    """ a heuristic function that always returns 0 """
     return 0
 
 def h1(state):
@@ -86,18 +74,12 @@ def h1(state):
     return i
 
 class GreedySearcher(Searcher):
-    """ A class for objects that perform an informed greedy state-space
-        search on an Eight Puzzle.
-    """
-
     def __init__(self, heuristic):
         super().__init__(depth_limit=-1)
         self.heuristic = heuristic
 
     def priority(self, state):
-        """ computes and returns the priority of the specified state,
-            based on the heuristic function used by the searcher
-        """
+        
         return -1 * self.heuristic(state)
 
     def add_state(self, state):
@@ -111,9 +93,6 @@ class GreedySearcher(Searcher):
 
     def __repr__(self):
 
-        """ returns a string representation of the GreedySearcher object
-            referred to by self.
-        """
         s = type(self).__name__ + ': '
         s += str(len(self.states)) + ' untested, '
         s += str(self.num_tested) + ' tested, '
@@ -124,9 +103,7 @@ class GreedySearcher(Searcher):
 class AStarSearcher(GreedySearcher):
 
     def priority(self, state):
-        """ computes and returns the priority of the specified state,
-            based on the heuristic function used by the searcher
-        """
+
         return -1 * (self.heuristic(state) + state.num_moves)
 
 
